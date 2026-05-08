@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from pydantic import BaseModel, EmailStr
 import uuid
 import pdfgen
-
+import random
 
 class RegistrationEvent(BaseModel):
     registration_id: str = str(uuid.uuid4())
@@ -35,8 +35,11 @@ def callback(ch, method, properties, body):
         print(f"🎯 Событие: {event.event_name}")
         print(f"👑 VIP статус: {'Да' if event.is_vip else 'Нет'}")
         
-        pdfgen.gen_File(event.user_name, event.user_email, event.event_name, event.registration_time)
-        
+        if not event.is_vip:
+            pdfgen.gen_File(event.user_name, event.user_email, event.event_name, event.registration_time, vip=False, seat=random.randint(1, 100))
+        else:
+            pdfgen.gen_File(event.user_name, event.user_email, event.event_name, event.registration_time, vip=True, seat="VIP Lounge")
+
         print(f"{'='*60}\n")
         
         # Подтверждаем обработку сообщения (acknowledge)
