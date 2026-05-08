@@ -5,6 +5,8 @@ import sys
 from datetime import datetime, timezone
 from pydantic import BaseModel, EmailStr
 import uuid
+import pdfgen
+
 
 class RegistrationEvent(BaseModel):
     registration_id: str = str(uuid.uuid4())
@@ -33,12 +35,7 @@ def callback(ch, method, properties, body):
         print(f"🎯 Событие: {event.event_name}")
         print(f"👑 VIP статус: {'Да' if event.is_vip else 'Нет'}")
         
-        # Здесь можно добавить бизнес-логику
-        if event.is_vip:
-            print(f"✨ VIP-клиент! Отправляем персональное приглашение...")
-            # Отправить email, SMS и т.д.
-        else:
-            print(f"📧 Отправляем стандартное приветственное письмо...")
+        pdfgen.gen_File(event.user_name, event.user_email, event.event_name, event.registration_time)
         
         print(f"{'='*60}\n")
         
