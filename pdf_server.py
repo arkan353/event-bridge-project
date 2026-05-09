@@ -18,5 +18,5 @@ def __serve_ticket(ticket_id):
         return "Ticket not found", 404
     
 def run_server():
-    app.run(host='localhost', port=8080)
+    app.run(host='0.0.0.0', port=8080)
     
